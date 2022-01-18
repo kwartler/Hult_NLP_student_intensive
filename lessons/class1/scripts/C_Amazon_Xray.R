@@ -1,13 +1,13 @@
 #' Title: Amazon X-Ray part 2
 #' Purpose: Explore more movie data
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
-#' Date: Dec 30 2020
+#' Date: Jan 18 2022
 #'
 
 ### 1. Set working directory to your specific movie
-setwd("~/Desktop/hult_NLP_student/lessons/class1/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class1/data")
 
 # Turn off scientific notation
 options(scipen = 999)
@@ -16,9 +16,12 @@ options(scipen = 999)
 library(ggplot2)
 library(ggthemes)
 library(rbokeh)
+library(RCurl)
 
 ### 3. Read in data
 # Use the read.csv function for your specific onScreenCharacters.csv file
+#gitFile <- url('https://raw.githubusercontent.com/kwartler/Hult_NLP_student_intensive/main/lessons/class1/data/forceAwakens_onScreenCharacters.csv')
+#charDF <- read.csv(gitFile)
 charDF   <- read.csv('forceAwakens_onScreenCharacters.csv')
 
 ### 4. Apply functions to clean up data & get insights/analysis

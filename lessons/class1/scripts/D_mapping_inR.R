@@ -2,13 +2,13 @@
 #' Title: Mapping in R
 #' Purpose: Load geospatial data and visualize it
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
 #' Date: Dec 30 2020
 #'
 
 ## Set the working directory
-setwd("~/Desktop/hult_NLP_student/lessons/class1/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class1/data")
 
 # Libs
 library(maps)

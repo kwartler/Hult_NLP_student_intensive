@@ -7,7 +7,7 @@
 #'
 
 ### 1. Set working directory to your specific movie
-setwd("~/Desktop/hult_NLP_student/lessons/class1/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class1/data")
 
 # Turn off scientific notation
 options(scipen = 999)
@@ -15,9 +15,12 @@ options(scipen = 999)
 ### 2. Load libraries to customize R
 library(ggplot2)
 library(ggthemes)
+library(RCurl)
 
 ### 3. Read in data
 # Use the read.csv function for your specific definedScenes.csv file
+#gitFile <- url('https://raw.githubusercontent.com/kwartler/Hult_NLP_student_intensive/main/lessons/class1/data/lego_definedScenes.csv')
+#scenesDF <- read.csv(gitFile)
 scenesDF   <- read.csv('lego_definedScenes.csv')
 
 ### 4. Apply functions to clean up data & get insights/analysis
@@ -67,7 +70,7 @@ ggplot(scenesDF[-16,], aes(colour = name)) +
   geom_segment(aes(x = start, xend = end,
                    y = id,    yend = id), size = 3) +
   geom_text(data=scenesDF[-16,], aes(x = end, y = id, label = name), 
-            size = 2.25, color = 'black', alpha = 0.5, check_overlap = TRUE) +
+            size = 2.25, color = 'black', alpha = 0.80, check_overlap = TRUE) +
   theme_gdocs() + theme(legend.position = "none")
 
 # End
