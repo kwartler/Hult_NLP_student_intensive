@@ -10,7 +10,7 @@ If wanting to have a reference book during or after the course, the lessons supp
 |-----------|-----------------------------------------|----------------------|
 |Jan 20 Thur|What is NLP, git, r syntax, r-studio     |                      |
 |Jan 21 Fri |String Manipulation, DTM/TDM/WFM, Visuals|                      |
-|Jan 22 Sat |Supervised & Unsupervised Methods        |EDA Visuals Assignment|
+|Jan 22 Sat |Sentiment, Super & Unsupervised Models   |EDA Visuals Assignment|
 |Jan 23 Sun |API, web scraping, ESG & Ethics          |                      |
 |Jan 31 Mon |NA                                       |CASE: Press Releases  |
 

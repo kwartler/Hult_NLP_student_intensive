@@ -1,9 +1,9 @@
 #' Title: Simple Word Cloud
 #' Purpose: Build a word cloud with bi-grams
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
-#' Date: Dec 30 2020
+#' Date: Jan 18 2022
 #'
 
 # Set the working directory
@@ -49,6 +49,8 @@ bigramTokens <-function(x){
 }
 
 # Data
+#gitFile <- url('https://raw.githubusercontent.com/kwartler/Hult_NLP_student_intensive/main/lessons/class2/data/chardonnay.csv')
+#text <- read.csv(gitFile)
 text <- read.csv('chardonnay.csv', header=TRUE)
 
 # As of tm version 0.7-3 tabular was deprecated
