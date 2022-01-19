@@ -1,8 +1,18 @@
 # Hult_NLP_student_intensive
-4 day Hult Student NLP Repo
+4 day Hult Student NLP Repository
 
 ## Course Book
 If wanting to have a reference book during or after the course, the lessons support the examples in Ted Kwartler's book [Text Mining in Practice with R](https://www.amazon.com/Text-Mining-Practice-Ted-Kwartler/dp/1119282012)
+
+## Classes & Assignment Due dates
+
+|Class      |Covered in Class.                        |Due 5pm EST           |
+|-----------|-----------------------------------------|----------------------|
+|Jan 20 Thur|What is NLP, git, r syntax, r-studio     |                      |
+|Jan 21 Fri |String Manipulation, DTM/TDM/WFM, Visuals|                      |
+|Jan 22 Sat |Supervised & Unsupervised Methods        |EDA Visuals Assignment|
+|Jan 23 Sun |API, web scraping, ESG & Ethics          |                      |
+|Jan 31 Mon |NA                                       |CASE: Press Releases  |
 
 ## Working with R
 If you are new to R, please take an online course to get familarity prior to the first session.  We will still cover R basics but students have been aided by spending a few hours taking a free online course at [DataQuest](www.dataquest.com) or [DataCamp](www.datacamp.com).  The code below should be run in the console to install packages needed for the semester.
