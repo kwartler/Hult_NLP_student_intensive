@@ -16,8 +16,11 @@ library(ggthemes)
 library(ggplot2)
 library(leaflet)
 library(mapproj)
+library(RCurl)
 
 # Import
+gitFile <- url('https://raw.githubusercontent.com/kwartler/Hult_NLP_student_intensive/main/lessons/class1/data/amznWarehouses.csv')
+amzn <- read.csv(gitFile)
 amzn <- read.csv('amznWarehouses.csv')
 
 # This is messy webscraped data, check out the state.
@@ -47,33 +50,44 @@ map('state', region = c('mass', 'maine', 'vermont', 'new hampshire'))
 points(NEwarehouses$lon,NEwarehouses$lat, col='red')
 dev.off()
 
-# More familiar ggplot interface
+# Examine the map data
+head(map_data('state'))
 us <- fortify(map_data('state'), region = 'region')
+
+# More familiar ggplot interface
 gg <- ggplot() + 
-  geom_map(data  =  us, map = us,
-              aes(x = long, y = lat, map_id = region, group = group), fill = 'white', color = 'black', size = 0.25) + 
+  geom_map(data  =  us, 
+           map = us,
+           aes(x = long, y = lat, map_id = region, group = group), 
+           fill = 'white', color = 'black', size = 0.25) + 
   coord_map('albers', lat0 = 39, lat1 = 45) +
   theme_map()
 gg
 
-# Examine the map data
-head(us)
-
 # Subset to multiple states
 ne <- us[ us$region %in% c("massachusetts","maine", "vermont", "new hampshire"), ]
 ggNE <- ggplot() + 
-  geom_map(data  =  ne, map = ne,
-           aes(x = long, y = lat, 
-               map_id = region, group = group), 
+  geom_map(data  =  ne, 
+           map = ne,
+           aes(x = long, 
+               y = lat, 
+               map_id = region, 
+               group = group), 
            fill = 'white', color = 'black', size = 0.25) + 
   coord_map('albers', lat0 = 39, lat1 = 45) +
   theme_map()
+
+# Examine
+ggNE
+
+# Add points layer
 ggNE +
-  geom_point(data=NEwarehouses, 
-             aes(x=lon, y=lat), color='red', alpha=0.5) 
+  geom_point(data  = NEwarehouses, 
+             aes(x = lon, y=lat), 
+             color = 'red', alpha=0.5) 
 
 # County and single state
-ma       <- subset(us, us$region=='massachusetts')
+#ma       <- subset(us, us$region=='massachusetts') # Other way to get just a state
 counties <- map_data("county")
 MAcounty <- subset(counties, region == "massachusetts")
 onlyMA   <- subset(NEwarehouses,NEwarehouses$stateAbb=='MA')
@@ -86,6 +100,11 @@ ggMA <- ggplot() +
            fill = 'white', color = 'blue', size = 0.25) + 
   coord_map('albers', lat0 = 39, lat1 = 45) +
   theme_map()
+
+# Examine
+ggMA
+
+# Add points layer
 ggMA +
   geom_point(data = onlyMA, 
              aes(x = lon, y = lat), color = 'red', alpha=0.5) 

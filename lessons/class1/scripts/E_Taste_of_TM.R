@@ -1,27 +1,38 @@
 #' Title: Quick Taste of what's to come
 #' Purpose: Learn some basic functions
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
-#' Date: Feb 22, 2021
+#' Date: Jan 18 2922
 #'
 
 # 1. WD
-setwd("~/Desktop/hult_NLP_student/lessons/class1/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class1/data")
 
-# 2. Data
+# 2. Libs
+library(sentimentr)
+library(tm)
+library(RCurl)
+library(ggthemes)
+
+# 3. Data
+#gitFile <- url('https://raw.githubusercontent.com/kwartler/Hult_NLP_student_intensive/main/lessons/class1/data/exampleNews.csv')
+#txt <- read.csv(gitFile)
 txt <- read.csv("exampleNews.csv" )
 
-# 3. Libs
-library(qdap)
-library(tm)
-
 # 4. Apply some functions
-pol <- polarity(txt$description, txt$name)
-freq <- freq_terms(txt$content, stopwords = stopwords('SMART'))
+emoNews <- emotion_by(txt$description, txt$name)
+polNews <- sentiment_by(txt$description, txt$name)
 
-# 5. Consume
-barplot(pol$group$ave.polarity, names.arg = pol$group$name, las= 2)
-plot(freq)
+# 5. Polarity by Source
+barplot(polNews$ave_sentiment, names.arg = polNews$name, las= 2)
+
+# Drop Negation Emotions & focus on the positve
+emoNewsNegation <- emoNews[-grep('negated', emoNews$emotion_type),]
+keeps <- grepl('anger|disgust|fear|sadness', emoNewsNegation$emotion_type)
+emoNewsNegation <- emoNewsNegation[keeps, ]
+ggplot(emoNewsNegation) + 
+  geom_col(aes(x = name, y = emotion_count, fill = emotion_type)) + 
+  theme_gdocs()
 
 # End
