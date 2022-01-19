@@ -1,13 +1,13 @@
 #' Title: R Sting Basics Stringi & Stringr
 #' Purpose: Explore a bunch of functions from the most common string manipulations packages
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
 #' Date: Dec 30 2020
 #' 
 
 # Wd
-setwd("~/Desktop/hult_NLP_student/lessons/class2/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class2/data")
 
 # library
 library(stringi)
@@ -100,3 +100,4 @@ str_trim(allText, side = c("both", "left", "right"))
 trimws(allText, which = 'both')
 
 # End
+

@@ -1,22 +1,25 @@
 #' Title: String Search Manipulation
 #' Purpose: Learn some basic string manipulation functions
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
 #' Date: Dec 30 2020
 #'
 
 # Set the working directory
-setwd("~/Desktop/hult_NLP_student/lessons/class2/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class2/data")
 
 # Libs
 library(stringi)
+library(RCurl)
 
 # Options & Functions
 options(stringsAsFactors = FALSE) #text strings will not be factors of categories
 Sys.setlocale('LC_ALL','C') #some tweets are in different languages so you may get an error
 
 # Get Data
+#gitFile <- url('https://raw.githubusercontent.com/kwartler/Hult_NLP_student_intensive/main/lessons/class2/data/coffee.csv')
+#text <- read.csv(gitFile)
 text <- read.csv('coffee.csv', header=TRUE)
 
 # Logical T/F vector that a string appears at least ONCE
