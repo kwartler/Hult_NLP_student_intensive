@@ -3,7 +3,7 @@
 #' Author: Ted Kwartler
 #' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
-#' Date: Jan 18 2922
+#' Date: Jan 18 2022
 #'
 
 # 1. WD
