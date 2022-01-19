@@ -1,29 +1,30 @@
 #' Title: Frequency and Associations
 #' Purpose: Obtain term frequency and explore associations
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
-#' Date: Dec 30 2020
+#' Date: Jan 18 2022
 #'
 
 # Set the working directory
-setwd("~/Desktop/hult_NLP_student/lessons/class3/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class2/data")
 
 # Libs
 library(tm)
 library(qdap)
 library(ggplot2)
 library(ggthemes)
+library(RCurl)
 
 # Options & Functions
 options(stringsAsFactors = FALSE)
 Sys.setlocale('LC_ALL','C')
 
 tryTolower <- function(x){
-  y = NA
-  try_error = tryCatch(tolower(x), error = function(e) e)
-  if (!inherits(try_error, 'error'))
-    y = tolower(x)
+  y <- NA
+  tryError <- tryCatch(tolower(x), error = function(e) e)
+  if (!inherits(tryError, 'error'))
+    y <- tolower(x)
   return(y)
 }
 
@@ -44,6 +45,8 @@ stops <- c(stopwords('SMART'), 'amp', 'britishairways', 'british',
                      'flight', 'flights', 'airways')
 
 # Read in Data, clean & organize
+#gitFile   <- url('https://raw.githubusercontent.com/kwartler/Hult_NLP_student_intensive/main/lessons/class2/data/BritishAirways.csv')
+#text      <- read.csv(gitFile)
 text      <- read.csv('BritishAirways.csv')
 txtCorpus <- VCorpus(VectorSource(text$text))
 txtCorpus <- cleanCorpus(txtCorpus, stops)
@@ -84,16 +87,17 @@ associations <- findAssocs(tweetTDM, 'brewdog', 0.30)
 associations
 
 # Organize the word associations
-assocDF <- data.frame(terms=names(associations[[1]]),
-                       value=unlist(associations))
+assocDF <- data.frame(terms     = names(associations[[1]]),
+                       value    = unlist(associations), 
+                      row.names = NULL)
 assocDF$terms <- factor(assocDF$terms, levels=assocDF$terms)
-rownames(assocDF) <- NULL
 assocDF
 
 # Make a dot plot
 ggplot(assocDF, aes(y=terms)) +
   geom_point(aes(x=value), data=assocDF, col='#c00c00') +
   theme_gdocs() + 
-  geom_text(aes(x=value,label=value), colour="red",hjust="inward", vjust ="inward" , size=3) 
+  geom_text(aes(x=value,label=value), 
+            colour="red",hjust="inward", vjust ="inward" , size=3) 
 
 # End
