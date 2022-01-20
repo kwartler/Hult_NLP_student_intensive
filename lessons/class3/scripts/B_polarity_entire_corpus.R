@@ -1,13 +1,13 @@
 #' Title: Polarity on a corpus
 #' Purpose: Learn and calculate polarity 
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
-#' Date: Feb 28, 2021
+#' Date: Jan 18 2022
 #'
 
 # Wd
-setwd("~/Desktop/hult_NLP_student/lessons/class4/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class3/data")
 
 # Libs
 library(tm)
@@ -20,11 +20,27 @@ text <- readLines('pharrell_williams_happy.txt')
 polarity(text)
 
 # Does it Matter if we process it?
-source('~/Desktop/hult_NLP_student/lessons/Z_otherScripts/ZZZ_supportingFunctions.R')
+# Custom Functions
+tryTolower <- function(x){
+  y = NA
+  try_error = tryCatch(tolower(x), error = function(e) e)
+  if (!inherits(try_error, 'error'))
+    y = tolower(x)
+  return(y)
+}
+
+cleanCorpus<-function(corpus, customStopwords){
+  corpus <- tm_map(corpus, removeNumbers)
+  corpus <- tm_map(corpus, removePunctuation)
+  corpus <- tm_map(corpus, stripWhitespace)
+  corpus <- tm_map(corpus, content_transformer(tryTolower))
+  corpus <- tm_map(corpus, removeWords, customStopwords)
+  return(corpus)
+}
 
 txt <- VCorpus(VectorSource(text))
 txt <- cleanCorpus(txt, stopwords("SMART"))
-polarity(content(txt[[1]]))
+polarity(content(txt[[1]])) #removing stopwords decreases the denominator
 
 # Examine the polarity obj more
 pol <- polarity(content(txt[[1]]))
@@ -42,9 +58,9 @@ pol$all$pos.words
 pol$all$neg.words
 
 # What are the doc words after polarity processing?
-pol$all$text.var[[1]]
+cat(pol$all$text.var[[1]])
 
-# Document View
+# Document View; no group variable so still lumped together
 pol$group
 
 # End

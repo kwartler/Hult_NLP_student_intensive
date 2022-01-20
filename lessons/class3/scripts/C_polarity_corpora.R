@@ -1,12 +1,12 @@
 #' Title: Polarity w/2+docs
 #' Purpose: Learn and calculate polarity 
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
-#' Date: Dec 28, 2020
+#' Date: Jan 18 2022
 #'
 # Wd
-setwd("~/Desktop/hult_NLP_student/lessons/class4/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class3/data")
 
 # Libs
 library(tm)
@@ -48,12 +48,10 @@ pol$all$neg.words[[1]] #happy
 pol$all$neg.words[[2]] #starboy
 
 # Raw Text
-pol$all$text.var[1]
-pol$all$text.var[2]
+cat(pol$all$text.var[1])
+cat(pol$all$text.var[2])
 
 # High Level Document/Group View
 pol$group
-
-# End
 
 # End

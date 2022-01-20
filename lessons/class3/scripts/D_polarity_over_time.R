@@ -1,99 +1,42 @@
 #' Title: Polarity Over Time
-#' Purpose: Learn and calculate polarity 
+#' Purpose: Learn to calculate polarity 
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
 #' Date: Dec 28, 2020
 #'
 
-# Wd
-setwd("~/Desktop/hult_NLP_student/lessons/class4/data")
-
-# Libs
+# Libraries
+library(lubridate) #not used here but useful for extracting days, months, hours etc as grouping variables
 library(tm)
-library(qdap)
-#library(rtweet)
-library(lubridate)
+library(sentimentr)
+library(RCurl)
 
-# Custom Functions
-source('~/Desktop/Harvard_NLP_Student/lessons/Z_otherScripts/ZZZ_supportingFunctions.R')
+# Options & Functions
+options(stringsAsFactors = FALSE)
+Sys.setlocale('LC_ALL','C')
 
-# Data
-# AVOID NAMESPACE CONFLICT: RAW() can only be applied to a 'raw', not a 'list'
-#unicorns <- rtweet::search_tweets(q = "unicorn", n = 1000)
-#saveRDS(unicorns, 'unicorns.rds')
-unicorns <- readRDS('unicorns.rds')
+# Get the file
+gitFile <- url('https://raw.githubusercontent.com/kwartler/Hult_NLP_student_intensive/main/lessons/class2/data/chardonnay.csv')
+txt <- read.csv(gitFile)
 
+# Date Time Class & Order
+head(txt$created,2) #examine
+txt$created <- as.POSIXct(txt$created)
+head(sort(txt$created),2) #examine to show difference
 
-# Data
-head(unicorns$created_at)
-class(unicorns$created_at)
-min(unicorns$created_at)
-max(unicorns$created_at)
+# Order the entire DF
+txt <- txt[order(txt$created),]
 
-# To make it more interesting let's make it a bunch of random dates
-unicorns$fakeDate <- sample(seq(as.Date("2021/01/01"), 
-                                as.Date("2021/02/02"), by = "day"), nrow(unicorns), replace = T)
+# Get sentiment for each individual document which was ordered by date
+pol <- sentiment_by(txt$text, txt$id)
 
-# Extract Temporal Grouping Options
-unicorns$min <-  minute(unicorns$created_at)
-unicorns$hr  <-   hour(unicorns$created_at)
-unicorns$day <- day(unicorns$fakeDate)#day(unicorns$created_at)
-unicorns$weekDay <-  weekdays(unicorns$fakeDate)#weekdays(unicorns$created_at)
-unicorns$week    <- week(unicorns$fakeDate)#week(unicorns$created_at)
+# Append the document average sentiment to the original data
+txt$pol <- pol$ave_sentiment
 
-# Examine to see what's been extracted
-head(unicorns$min)
-head(unicorns$hr)
-head(unicorns$day)
-head(unicorns$weekDay)
-head(unicorns$week)
+# Plot a moving average merely as an example; kind of a nonsense result
+par(mfrow=c(2,1))
+plot(forecast::ma(txt$pol,24), type = 'l')
+plot(cumsum(grepl('marvin', txt$text,ignore.case = T)), type = 'l')
 
-# Now get the polarity for each doc
-polUni <- polarity(as.character(unicorns$text))
-polUni
-
-# Now Organize the temporal and polarity info
-timePol <- data.frame(tweetPol = polUni$all$polarity,
-                      min      = unicorns$min,
-                      hr       = unicorns$hr,
-                      day      = unicorns$day, 
-                      weekDay  = unicorns$weekDay,
-                      week     = unicorns$week)
-
-# Examine
-head(timePol)
-mean(timePol$tweetPol, na.rm = T)
-polUni
-
-# NA to 0
-timePol[is.na(timePol)] <- 0
-
-# Week Avg
-aggregate(tweetPol~week, timePol, mean)
-
-# Hourly Avg
-hrPol <- aggregate(tweetPol~day+hr, timePol, mean)
-hrPol[order(hrPol$day, hrPol$hr),]
-
-# Minute by Minute Avg
-minPol <- aggregate(tweetPol~day+hr+min, timePol, mean)
-minPol[order(minPol$day, minPol$hr, minPol$min),]
-
-# Summary Stats by weekday, useful for repeating patterns (seasonality)
-weekDayPol <- aggregate(tweetPol~weekDay, timePol, mean)
-weekDayPol
-
-# Tell R the ordinal nature of the factor levels
-weekDayPol$weekDay <- factor(weekDayPol$weekDay, levels= c("Sunday", "Monday", 
-                                         "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
-
-weekDayPol[order(weekDayPol$weekDay), ]
-
-# Week of Yr
-weekPol <- aggregate(tweetPol~week, timePol, mean)
-weekPol
-
-# Quanteda package does time series analysis too but not covered in class.
-# https://stackoverflow.com/questions/58918872/performing-time-series-analysis-of-quanteda-tokens
 # End

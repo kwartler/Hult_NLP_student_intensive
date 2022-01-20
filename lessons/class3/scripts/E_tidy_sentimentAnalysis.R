@@ -1,13 +1,13 @@
 #' Title: Sentiment Analysis
 #' Purpose: Inner join sentiment lexicons to text
 #' Author: Ted Kwartler
-#' email: edward.kwartler@hult.edu
+#' email: edward.kwartler@faculty.hult.edu
 #' License: GPL>=3
-#' Date: Dec 28 2020
+#' Date: Jan 18 2022
 #'
 
 # Wd
-setwd("~/Desktop/hult_NLP_student/lessons/class4/data")
+setwd("~/Desktop/Hult_NLP_student_intensive/lessons/class3/data")
 
 # Libs
 library(tm)
@@ -19,8 +19,25 @@ library(echarts4r)
 library(tidyr)
 library(corpus)
 
-# Bring in our supporting functions
-source('~/Desktop/Harvard_NLP_Student/lessons/Z_otherScripts/ZZZ_supportingFunctions.R')
+# Functions
+tryTolower <- function(x){
+  y = NA
+  try_error = tryCatch(tolower(x), error = function(e) e)
+  if (!inherits(try_error, 'error'))
+    y = tolower(x)
+  return(y)
+}
+
+cleanCorpus<-function(corpus, customStopwords){
+  corpus <- tm_map(corpus, content_transformer(qdapRegex::rm_url))
+  #corpus <- tm_map(corpus, content_transformer(replace_contraction)) 
+  corpus <- tm_map(corpus, removeNumbers)
+  corpus <- tm_map(corpus, removePunctuation)
+  corpus <- tm_map(corpus, stripWhitespace)
+  corpus <- tm_map(corpus, content_transformer(tryTolower))
+  corpus <- tm_map(corpus, removeWords, customStopwords)
+  return(corpus)
+}
 
 # Create custom stop words
 stops <- c(stopwords('english'))
@@ -30,20 +47,18 @@ txt <- read.csv('news.csv')
 table(txt$doc_id) #565 news articles mentioning President Trump
 
 
-# Ignoring authorship/news politcal leanings, overall let's examine the emotional words used in these articles
+# Ignoring authorship/news political leanings, overall let's examine the emotional words used in these articles
 txtDTM <- VCorpus(VectorSource(txt$text))
 txtDTM <- cleanCorpus(txtDTM, stops)
 txtDTM <- DocumentTermMatrix(txtDTM)
 
 # Examine 
-as.matrix(txtDTM[1:10,100:110])
+as.matrix(txtDTM[1:5,100:105])
 dim(txtDTM)
 
 # Examine Tidy & Compare
-# If you use cleanMatrix() you need to switch it back to a DTM with this
-#txtDTM      <- as.DocumentTermMatrix(txtDTM, weighting = weightTf ) 
 tidyCorp <- tidy(txtDTM)
-tidyCorp[100:110,]
+tidyCorp[100:105,]
 dim(tidyCorp)
 
 # Get bing lexicon
@@ -77,19 +92,11 @@ afinnSent$afinnAmt     <- afinnSent$count * afinnSent$value
 
 # Compare w/polarity and bing
 mean(afinnSent$afinnAmt)
-
-# FAKE EXAMPLE: if the documents were related and temporal, make sure they are sorted by time first!
-# Example use case : i.e. over time how was the emotional content for a topic i.e. Pakistan articles
-afinnTemporal          <- aggregate(afinnAmt~document, afinnSent, sum)
-afinnTemporal$document <- as.numeric(afinnTemporal$document)
-afinnTemporal          <- afinnTemporal[order(afinnTemporal$document),]
-
-# Quick plot
-plot(afinnTemporal$afinnAmt, type="l", main="Quick Timeline of Identified Words") 
+plot(density(afinnSent$afinnAmt))
+ 
 
 
-# Quick Check with the pptx for a reminder.
-
+# Check with the pptx for a reminder.
 # Get nrc lexicon; deprecated in tidytext, use library(lexicon)
 #nrc <- read.csv('nrcSentimentLexicon.csv')
 nrc <- nrc_emotions
@@ -133,4 +140,7 @@ emotionID %>%
   e_tooltip() %>%
   e_theme("dark-mushroom") 
 
+# Other lexicons worth exploring:
+# https://ai.googleblog.com/2021/10/goemotions-dataset-for-fine-grained.html
+# http://sentiment.christopherpotts.net/lexicons.html
 # End
